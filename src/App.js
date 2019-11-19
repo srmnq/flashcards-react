@@ -17,7 +17,11 @@ function App() {
       </Button>
       {cards.map((card, index) =>
         isOnlyBookmarksShown ? (
-          <Card key={index} {...card} />
+          <Card
+            toggleBookmark={() => toggleBookmark(index)}
+            key={index}
+            {...card}
+          />
         ) : (
           card.isBookmarked && <Card key={index} {...card} />
         )
@@ -27,6 +31,15 @@ function App() {
 
   function showBookmarked() {
     setIsOnlyBookmarksShown(!isOnlyBookmarksShown)
+  }
+
+  function toggleBookmark(index) {
+    const card = cards[index]
+    return setCards([
+      ...cards.slice(0, index),
+      { ...card, isBookmarked: !card.isBookmarked },
+      ...cards.slice(index + 1),
+    ])
   }
 }
 
