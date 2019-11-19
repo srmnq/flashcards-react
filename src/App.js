@@ -7,7 +7,7 @@ import Button from './Button.js'
 
 function App() {
   const [cards, setCards] = useState(cardData)
-  const [isOnlyBookmarksShown, setIsOnlyBookmarksShown] = useState(true)
+  const [isOnlyBookmarksShown, setIsOnlyBookmarksShown] = useState(false)
   console.log(cards)
   return (
     <AppStyled>
@@ -15,9 +15,13 @@ function App() {
       <Button onClick={showBookmarked}>
         {isOnlyBookmarksShown ? 'Bookmarked cards' : 'All Cards'}
       </Button>
-      {cards.map((card, index) => (
-        <Card key={index} {...card} />
-      ))}
+      {cards.map((card, index) =>
+        isOnlyBookmarksShown ? (
+          <Card key={index} {...card} />
+        ) : (
+          card.isBookmarked && <Card key={index} {...card} />
+        )
+      )}
     </AppStyled>
   )
 
