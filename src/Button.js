@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components/macro'
 
 function Button({ onClick, children }) {
-  return <ButtonStyled onClick={onClick}>{children}</ButtonStyled>
+  return <ButtonStyled onClick={onClick}> {children} </ButtonStyled>
 }
 const ButtonStyled = styled.button`
   background: #000;

@@ -1,61 +1,22 @@
-import React, { useState } from 'react'
-import cardData from './cards.json'
-import GlobalStyle from './GlobalStyle'
-import Card from './Card'
-import styled from 'styled-components/macro'
-import Button from './Button.js'
+import React from 'react'
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
+import Home from './Home'
+import Create from './Create'
 
-function App() {
-  const [cards, setCards] = useState(cardData)
-  const [isOnlyBookmarksShown, setIsOnlyBookmarksShown] = useState(false)
+export default function App() {
   return (
-    <AppStyled>
-      <GlobalStyle />
-      <Button onClick={showBookmarked}>
-        {isOnlyBookmarksShown ? 'Bookmarked cards' : 'All Cards'}
-      </Button>
-      {isOnlyBookmarksShown
-        ? cards
-            .filter(card => card.isBookmarked)
-            .map((card, index) => (
-              <Card
-                toggleBookmark={() => toggleBookmark(index)}
-                key={index}
-                {...card}
-              />
-            ))
-        : cards.map((card, index) => (
-            <Card
-              toggleBookmark={() => toggleBookmark(index)}
-              key={index}
-              {...card}
-            />
-          ))}
-    </AppStyled>
+    <Router>
+      <Link to="/">Home</Link>
+      <Link to="/create">Create</Link>
+
+      <Switch>
+        <Route path="/create">
+          <Create />
+        </Route>
+        <Route path="/">
+          <Home />
+        </Route>
+      </Switch>
+    </Router>
   )
-
-  function showBookmarked() {
-    setIsOnlyBookmarksShown(!isOnlyBookmarksShown)
-  }
-
-  function toggleBookmark(index) {
-    const card = cards[index]
-    return setCards([
-      ...cards.slice(0, index),
-      { ...card, isBookmarked: !card.isBookmarked },
-      ...cards.slice(index + 1),
-    ])
-  }
 }
-
-const AppStyled = styled.div`
-  display: grid;
-  justify-items: center;
-
-  gap: 40px;
-  margin: 0;
-  padding: 20px;
-  padding-top: 50px;
-`
-
-export default App
