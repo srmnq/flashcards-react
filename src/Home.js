@@ -1,13 +1,11 @@
 import React, { useState } from 'react'
 
-import cardData from './cards.json'
 import GlobalStyle from './GlobalStyle'
 import Card from './Card'
 import styled from 'styled-components/macro'
 import Button from './Button.js'
 
-function Home() {
-  const [cards, setCards] = useState(loadCards() || cardData)
+function Home({ cards, toggleBookmark }) {
   const [isOnlyBookmarksShown, setIsOnlyBookmarksShown] = useState(false)
 
   return (
@@ -41,27 +39,8 @@ function Home() {
     setIsOnlyBookmarksShown(!isOnlyBookmarksShown)
   }
 
-  function toggleBookmark(index) {
-    const card = cards[index]
-    setCards([
-      ...cards.slice(0, index),
-      { ...card, isBookmarked: !card.isBookmarked },
-      ...cards.slice(index + 1),
-    ])
-  }
   function saveCards() {
     localStorage.setItem('savedCards', JSON.stringify(cards))
-  }
-
-  function loadCards() {
-    const cardsJSON = localStorage.getItem('savedCards')
-    return JSON.parse(cardsJSON)
-  }
-
-  function createCard(questionValue, answerValue) {
-    const newCard = <Card question={questionValue} answer={answerValue} />
-    console.log(newCard)
-    // setCards(cards.push(newCard))
   }
 }
 const AppStyled = styled.div`
