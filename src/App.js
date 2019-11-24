@@ -1,31 +1,54 @@
-import React, { useState } from 'react'
-import cardData from './cards.json'
+import React, { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import Home from './Home'
 import Create from './Create'
+import { getCards, patchCard, patchBookmark } from './services'
 
 export default function App() {
-  const [cards, setCards] = useState(loadCards() || cardData)
+  const [cards, setCards] = useState([])
+
+  useEffect(() => {
+    getCards().then(setCards)
+  }, [])
+
+  // useEffect(() => {
+  //   console.log('this is called once')
+  // }, [])
+
+  // useEffect(() => {
+  //   console.log('this is called on every change')
+  // })
+
+  // useEffect(() => {
+  //   console.log('this is called when cards is changed')
+  // }, [cards])
+
   const [question, setQuestion] = useState('')
   const [answer, setAnswer] = useState('')
 
-  function toggleBookmark(index) {
+  function toggleBookmark(id) {
+    const index = cards.findIndex(card => card._id === id)
     const card = cards[index]
-    setCards([
-      ...cards.slice(0, index),
-      { ...card, isBookmarked: !card.isBookmarked },
-      ...cards.slice(index + 1),
-    ])
+    patchBookmark(card).then(changedCard => {
+      setCards([
+        ...cards.slice(0, index),
+        changedCard,
+        ...cards.slice(index + 1),
+      ])
+    })
   }
+
   function loadCards() {
     const cardsJSON = localStorage.getItem('savedCards')
     return JSON.parse(cardsJSON)
   }
 
-  function createNew() {
+  function createNew(event) {
+    event.preventDefault()
     setCards([{ question: question, answer: answer }, ...cards])
     setAnswer('')
     setQuestion('')
+    event.target.reset()
   }
 
   return (
@@ -38,7 +61,7 @@ export default function App() {
           <Create
             onInputQuestion={event => setQuestion(event.target.value)}
             onInputAnswer={event => setAnswer(event.target.value)}
-            onClick={() => createNew()}
+            onClick={event => createNew(event)}
           />
         </Route>
         <Route exact path="/">

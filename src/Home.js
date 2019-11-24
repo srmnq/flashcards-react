@@ -17,17 +17,19 @@ function Home({ cards, toggleBookmark }) {
       {isOnlyBookmarksShown
         ? cards
             .filter(card => card.isBookmarked)
-            .map((card, index) => (
+            .map(card => (
               <Card
-                toggleBookmark={() => toggleBookmark(index)}
-                key={index}
+                toggleBookmark={() => toggleBookmark(card._id)}
+                key={card._id}
+                id={card._id}
                 {...card}
               />
             ))
-        : cards.map((card, index) => (
+        : cards.map(card => (
             <Card
-              toggleBookmark={() => toggleBookmark(index)}
-              key={index}
+              toggleBookmark={() => toggleBookmark(card._id)}
+              key={card._id}
+              id={card._id}
               {...card}
             />
           ))}
